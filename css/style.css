@@ -1,0 +1,482 @@
+/* 三国消除战记 v2.1 - 样式（立体消除区 + Q版武将 + 顶部双血条） */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background:
+        radial-gradient(1200px 800px at 10% -10%, #2a1e42 0%, transparent 60%),
+        radial-gradient(1000px 700px at 110% 110%, #3a1824 0%, transparent 60%),
+        linear-gradient(180deg, #12132b 0%, #0a0a18 100%);
+    color: #fff;
+    font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh;
+    padding: 12px;
+}
+.game-container { width: 440px; max-width: 100vw; }
+
+/* ===== 顶部双血条面板 ===== */
+.hp-panel {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    background: linear-gradient(180deg, rgba(30,18,48,0.9), rgba(14,10,28,0.95));
+    border: 1px solid rgba(233,69,96,0.35);
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.hp-side { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.hp-left { justify-content: flex-start; }
+.hp-right { justify-content: flex-end; }
+.hp-main { flex: 1; min-width: 0; }
+.hp-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; }
+.hp-row-right { flex-direction: row-reverse; }
+.hp-name { font-size: 12px; font-weight: 700; color: #f9e6a0; letter-spacing: 0.5px; }
+.hp-text { font-size: 11px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+.hp-bar-track {
+    height: 12px;
+    background: linear-gradient(180deg, #1a1528, #0b0714);
+    border-radius: 6px; overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.6);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.6);
+}
+.hp-bar-fill {
+    height: 100%; border-radius: 6px;
+    transition: width 0.35s cubic-bezier(.2,.8,.2,1);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
+}
+.player-hp-fill { background: linear-gradient(90deg, #4be082 0%, #23b35a 100%); }
+.enemy-hp-fill  { background: linear-gradient(90deg, #ff7070 0%, #c8192a 100%); }
+
+.hp-portrait {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 900;
+    border: 2px solid;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.3);
+    flex-shrink: 0;
+}
+.hp-portrait-ally  { background: radial-gradient(circle at 30% 25%, #ffd56b, #d48a1b); border-color:#ffeaa3; color:#5a2b00; }
+.hp-portrait-enemy { background: radial-gradient(circle at 30% 25%, #b46bff, #4c0d7a); border-color:#e3b8ff; color:#fff; }
+
+.hp-center {
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    font-size: 18px;
+    color: #ffde5a;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.7), 0 0 10px rgba(255,222,90,0.6);
+    padding: 0 2px;
+}
+
+/* ===== 关卡条 ===== */
+.battle-info { text-align: center; margin-bottom: 8px; }
+.level-badge {
+    display: inline-block;
+    padding: 4px 16px;
+    background: linear-gradient(180deg, #f5a623, #b45f00);
+    color: #fff;
+    font-size: 12px; font-weight: 800;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+}
+
+/* ===== 战场舞台 ===== */
+.battle-scene {
+    position: relative;
+    height: 220px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid #e94560;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5), inset 0 -20px 40px rgba(0,0,0,0.4);
+    margin-bottom: 14px;
+}
+.stage-bg {
+    position: absolute; inset: 0;
+    background:
+        radial-gradient(ellipse at 50% 120%, #6b2f1a 0%, transparent 60%),
+        linear-gradient(180deg, #2b1238 0%, #491832 45%, #2d0f22 100%);
+}
+/* 地面 */
+.stage-bg::after {
+    content: '';
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 55px;
+    background:
+        linear-gradient(180deg, rgba(110,64,30,0.8) 0%, rgba(50,24,12,1) 100%);
+    border-top: 1px solid rgba(255,180,90,0.3);
+}
+
+.side {
+    position: absolute;
+    bottom: 10px;
+    top: 20px;
+    display: flex; align-items: flex-end; justify-content: center;
+    gap: 6px;
+}
+.side-ally  { left: 8px; width: 52%; }
+.side-enemy { right: 8px; width: 42%; justify-content: flex-end; padding-right: 10px; }
+
+/* ===== Q 版武将通用结构 ===== */
+.q-hero { position: relative; width: 62px; height: 120px; display:flex; flex-direction: column; align-items:center; justify-content:flex-end; }
+.q-hero.q-enemy { width: 78px; height: 140px; }
+.hero-body { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; animation: heroIdle 2.4s ease-in-out infinite; }
+.q-enemy .hero-body { animation: enemyIdle 2.8s ease-in-out infinite; }
+
+@keyframes heroIdle { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-3px);} }
+@keyframes enemyIdle { 0%,100%{ transform: translateY(0) scale(1);} 50%{ transform: translateY(-2px) scale(1.02);} }
+
+/* 头盔 */
+.hero-helmet {
+    width: 42px; height: 22px;
+    background: linear-gradient(180deg, #e9c875 0%, #8a5e14 100%);
+    border-radius: 22px 22px 6px 6px;
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.4);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.5), 0 2px 3px rgba(0,0,0,0.4);
+    margin-bottom: -4px; z-index: 3;
+}
+.hero-helmet::before {
+    /* 盔顶红缨 */
+    content:''; position:absolute; left:50%; top:-9px; transform: translateX(-50%);
+    width: 6px; height: 12px;
+    background: linear-gradient(180deg, #ff3a3a, #8a0909);
+    border-radius: 3px 3px 0 0;
+    box-shadow: 0 0 6px rgba(255,80,80,0.8);
+}
+.hero-helmet-green { background: linear-gradient(180deg, #5bcc7d 0%, #1f5b30 100%); }
+.hero-helmet-dark  { background: linear-gradient(180deg, #555 0%, #1a1a1a 100%); }
+.hero-helmet-enemy {
+    width: 50px; height: 24px;
+    background: linear-gradient(180deg, #c0a850 0%, #4b3a10 100%);
+    border-radius: 6px 6px 6px 6px;
+}
+.hero-helmet-enemy::before { background: linear-gradient(180deg,#ffd54a,#8a6408); }
+
+.horn { position:absolute; top:-10px; width:7px; height:14px; background: linear-gradient(180deg,#f5e3a0,#7a5512); border-radius: 2px; }
+.horn-l { left: 4px; transform: rotate(-25deg); }
+.horn-r { right: 4px; transform: rotate(25deg); }
+
+/* 脸 */
+.hero-face {
+    width: 36px; height: 32px;
+    background: radial-gradient(circle at 50% 40%, #ffe0c2, #e5b78a);
+    border-radius: 50% 50% 45% 45%;
+    position: relative; z-index: 2;
+    border: 1px solid rgba(0,0,0,0.25);
+    box-shadow: inset 0 -3px 6px rgba(0,0,0,0.18);
+}
+.face-guanyu { background: radial-gradient(circle at 50% 40%, #ff7d5c, #c13418); }
+.face-zhangfei { background: radial-gradient(circle at 50% 40%, #3a2a1a, #120a05); }
+.face-enemy { background: radial-gradient(circle at 50% 40%, #9e6ad7, #4e238e); width: 44px; height: 38px; }
+
+.eye {
+    position:absolute; top:10px; width:5px; height:6px;
+    background: #1a1a1a; border-radius: 50%;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.eye-l { left: 9px; }
+.eye-r { right: 9px; }
+.face-zhangfei .eye { background: #fff; border: 1px solid #000; }
+.eye-angry { transform: rotate(-20deg); }
+.eye-r.eye-angry { transform: rotate(20deg); }
+.eye-red { background:#ff3838; box-shadow: 0 0 6px #ff3838; }
+
+.mouth { position:absolute; bottom: 7px; left: 50%; transform: translateX(-50%); width:10px; height:3px; background:#8a2020; border-radius: 0 0 6px 6px; }
+.mouth-evil { width: 16px; height: 4px; background: #1a0505; border-radius: 2px; border-top: 1px solid #ff5a5a; }
+
+.beard {
+    position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+    width: 18px; height: 14px;
+    background: linear-gradient(180deg, #c88646, #6f4010);
+    border-radius: 0 0 50% 50%;
+}
+.beard-zhangfei { background: linear-gradient(180deg, #1a1005, #000); width: 22px; height: 16px; }
+
+/* 躯干（铠甲） */
+.hero-torso {
+    width: 46px; height: 48px;
+    margin-top: -2px;
+    background: linear-gradient(180deg, #e7c268 0%, #8e5d12 100%);
+    border-radius: 10px 10px 14px 14px;
+    border: 1px solid rgba(0,0,0,0.45);
+    box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.35),
+        inset 0 -5px 8px rgba(0,0,0,0.35),
+        0 3px 5px rgba(0,0,0,0.4);
+    position: relative; z-index: 1;
+}
+.hero-torso::before {
+    /* 护心镜 */
+    content:''; position:absolute; top:10px; left:50%; transform:translateX(-50%);
+    width:14px; height:14px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #ffeeaa, #664400);
+    border: 1px solid rgba(0,0,0,0.5);
+    box-shadow: 0 0 6px rgba(255,220,120,0.8);
+}
+.hero-torso-liubei  { background: linear-gradient(180deg, #f8d86e 0%, #a5680a 100%); }
+.hero-torso-guanyu  { background: linear-gradient(180deg, #3bb063 0%, #0d4a20 100%); }
+.hero-torso-zhangfei{ background: linear-gradient(180deg, #3a3a3a 0%, #080808 100%); }
+.hero-torso-enemy   { background: linear-gradient(180deg, #7d4cb5 0%, #2d104a 100%); width: 56px; height: 56px; }
+
+.shoulder {
+    position: absolute; top: -4px; width: 14px; height: 14px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffd66b, #6b3d00);
+    border: 1px solid rgba(0,0,0,0.5);
+    box-shadow: inset 0 -2px 3px rgba(0,0,0,0.3);
+}
+.shoulder-l { left: -6px; }
+.shoulder-r { right: -6px; }
+
+/* 武器 */
+.hero-weapon { position: absolute; }
+.weapon-sword {
+    /* 刘备·双股剑（右手一把） */
+    right: -10px; top: 28px;
+    width: 6px; height: 52px;
+    background: linear-gradient(180deg, #ecefff, #7a83a8);
+    border-radius: 2px;
+    border: 1px solid rgba(0,0,0,0.4);
+    box-shadow: 0 0 8px rgba(200,220,255,0.6);
+    transform: rotate(15deg);
+}
+.weapon-sword::after {
+    content:''; position:absolute; left:-4px; top:-4px; width:14px; height:5px;
+    background: linear-gradient(180deg,#d4a64a,#6a3f00); border-radius:2px;
+}
+.weapon-glaive {
+    /* 关羽·青龙偃月刀 */
+    right: -14px; top: 14px;
+    width: 4px; height: 72px;
+    background: linear-gradient(180deg, #7a4a1a, #3a2206);
+    border-radius: 2px;
+    transform: rotate(12deg);
+}
+.weapon-glaive::before {
+    content:''; position:absolute; top:-10px; left:-16px;
+    width:22px; height:26px;
+    background: linear-gradient(135deg, #e8fff0 0%, #2db25a 70%, #0f4a20 100%);
+    clip-path: polygon(0% 100%, 30% 0%, 100% 10%, 100% 80%);
+    box-shadow: 0 0 10px rgba(90,255,130,0.6);
+}
+.weapon-spear {
+    /* 张飞·丈八蛇矛 */
+    right: -12px; top: 8px;
+    width: 4px; height: 82px;
+    background: linear-gradient(180deg, #5a3010, #20100a);
+    transform: rotate(10deg);
+    border-radius: 2px;
+}
+.weapon-spear::before {
+    content:''; position:absolute; top:-14px; left:-5px;
+    width:14px; height:18px;
+    background: linear-gradient(180deg, #fff, #8795b8);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    filter: drop-shadow(0 0 6px rgba(220,230,255,0.8));
+}
+.weapon-axe {
+    /* 敌方·大斧 */
+    left: -14px; top: 16px;
+    width: 5px; height: 70px;
+    background: linear-gradient(180deg, #4a2a10, #1a0a05);
+    transform: rotate(-15deg);
+    border-radius: 2px;
+}
+.weapon-axe::before {
+    content:''; position:absolute; top:-4px; left:-18px;
+    width:24px; height:22px;
+    background: linear-gradient(135deg, #b8b8c8, #555);
+    clip-path: polygon(100% 0%, 100% 100%, 0% 70%, 0% 30%);
+    filter: drop-shadow(0 0 6px rgba(180,180,200,0.6));
+}
+
+/* 影子 */
+.hero-shadow {
+    width: 50px; height: 8px;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.6), transparent 70%);
+    border-radius: 50%;
+    margin-top: 2px;
+}
+.q-enemy .hero-shadow { width: 62px; height: 10px; }
+
+/* 名字 */
+.hero-name {
+    font-size: 11px;
+    color: #ffde5a;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.9), 0 0 3px rgba(0,0,0,0.8);
+    font-weight: 700;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+}
+.q-enemy .hero-name { color: #ff9a9a; }
+
+/* 敌方水平翻转朝左 */
+.side-enemy .q-hero .hero-body { transform: scaleX(-1); }
+.side-enemy .q-hero .hero-body { animation-name: enemyIdle; }
+.side-enemy .hero-name { transform: none; }
+
+/* ===== 战斗日志 ===== */
+.battle-log {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    font-size: 14px; color: #f1c40f; font-weight: 700;
+    padding: 4px 14px; background: rgba(0,0,0,0.6); border-radius: 20px;
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    white-space: nowrap; border: 1px solid rgba(241,196,15,0.5);
+    box-shadow: 0 0 10px rgba(241,196,15,0.3);
+    z-index: 10;
+}
+.battle-log.show { opacity: 1; }
+
+/* ===== 飘字 ===== */
+.damage-text, .heal-text, .combo-text {
+    position: absolute; font-size: 22px; font-weight: 900;
+    pointer-events: none; z-index: 20;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 0 8px currentColor;
+    transform: translateX(-50%);
+}
+.damage-text { color: #ff4b4b; animation: floatUp 1.4s forwards; }
+.heal-text   { color: #4be082; animation: floatUp 1.4s forwards; }
+.combo-text  { color: #c58eff; animation: floatUp 1s forwards; }
+@keyframes floatUp {
+    0% { opacity:1; transform: translate(-50%, 0) scale(0.8); }
+    20% { opacity:1; transform: translate(-50%, -10px) scale(1.15); }
+    100% { opacity:0; transform: translate(-50%, -70px) scale(1); }
+}
+
+/* ===== 技能特效 ===== */
+.skill-overlay {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(40,0,40,0.55), rgba(0,0,0,0.85));
+    display: flex; align-items: center; justify-content: center; z-index: 100;
+    animation: skillIn 0.3s ease-out;
+}
+@keyframes skillIn { from { opacity: 0; } to { opacity: 1; } }
+.skill-effect { text-align: center; animation: skillPulse 0.6s ease-out; }
+@keyframes skillPulse { 0% { transform: scale(0.4); opacity: 0; } 60% { transform: scale(1.15); opacity: 1; } 100% { transform: scale(1); opacity:1; } }
+.skill-icon { font-size: 54px; margin-bottom: 8px; filter: drop-shadow(0 0 14px #ffd85a); }
+.skill-text { font-size: 22px; color: #ffde5a; font-weight: 900; text-shadow: 0 0 10px #ff9a1a; letter-spacing: 2px; }
+.skill-subtext { font-size: 13px; color: #eee; margin-top: 4px; }
+
+/* ===== 消除区域信息条 ===== */
+.match-info { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
+.info-item {
+    padding: 5px 14px; border-radius: 18px;
+    font-size: 13px; font-weight: 800;
+    background: linear-gradient(180deg, rgba(40,25,60,0.9), rgba(18,10,30,0.9));
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+    color: #fff;
+}
+.info-heal    { color: #ff9a9a; border-color: rgba(231,76,60,0.5); }
+.info-combo   { color: #c58eff; border-color: rgba(155,89,182,0.5); }
+.info-attack  { color: #ffce5a; border-color: rgba(243,156,18,0.55); }
+
+/* ===== 立体消除网格 ===== */
+.grid-container {
+    padding: 10px;
+    border-radius: 18px;
+    background:
+        linear-gradient(180deg, #3a2755 0%, #160d28 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow:
+        0 10px 28px rgba(0,0,0,0.55),
+        inset 0 2px 0 rgba(255,255,255,0.12),
+        inset 0 -4px 12px rgba(0,0,0,0.5);
+}
+.grid-inner {
+    padding: 10px;
+    border-radius: 12px;
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+        linear-gradient(180deg, #0c0716 0%, #1a0f2e 100%);
+    border: 1px solid rgba(0,0,0,0.6);
+    box-shadow:
+        inset 0 4px 10px rgba(0,0,0,0.7),
+        inset 0 -1px 0 rgba(255,255,255,0.05);
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+}
+
+/* ===== 格子（3D宝石） ===== */
+.cell {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.15s ease-out, box-shadow 0.15s;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: bold;
+    border: 1px solid rgba(0,0,0,0.35);
+}
+
+/* 高光层 */
+.cell::before {
+    content: '';
+    position: absolute;
+    top: 6%; left: 8%; right: 40%; height: 36%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,255,255,0) 80%);
+    border-radius: 50% 50% 60% 40% / 60% 60% 40% 40%;
+    pointer-events: none;
+    filter: blur(0.3px);
+}
+/* 内阴影 / 底缘 */
+.cell::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 8px;
+    box-shadow:
+        inset 0 -4px 6px rgba(0,0,0,0.35),
+        inset 0 2px 0 rgba(255,255,255,0.15);
+    pointer-events: none;
+}
+
+.cell:hover { transform: translateY(-2px); }
+.cell.selected {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 2px #ffde5a, 0 0 14px #ffd85a, 0 4px 8px rgba(0,0,0,0.5);
+    z-index: 5;
+}
+.cell.removing { animation: removeAnim 0.4s forwards; }
+.cell.falling  { animation: fallIn 0.32s ease-out; }
+
+@keyframes removeAnim {
+    0% { transform: scale(1) rotate(0); opacity:1; }
+    50% { transform: scale(1.3) rotate(15deg); opacity:0.7; filter: brightness(1.6); }
+    100% { transform: scale(0) rotate(45deg); opacity:0; }
+}
+@keyframes fallIn {
+    0% { transform: translateY(-50px) scale(0.7); opacity: 0; }
+    60% { transform: translateY(4px) scale(1.05); opacity: 1; }
+    100% { transform: translateY(0) scale(1); opacity:1; }
+}
+
+/* 颜色：用径向渐变打造宝石质感 */
+.cell.red    {
+    background:
+        radial-gradient(circle at 30% 25%, #ff8a7a 0%, #e74c3c 45%, #8e1811 100%);
+    box-shadow: 0 3px 6px rgba(200,30,30,0.4);
+}
+.cell.yellow {
+    background:
+        radial-gradient(circle at 30% 25%, #ffeaa3 0%, #f1c40f 45%, #7a5b00 100%);
+    box-shadow: 0 3px 6px rgba(200,160,20,0.4);
+}
+.cell.green  {
+    background:
+        radial-gradient(circle at 30% 25%, #7fe8a6 0%, #2ecc71 45%, #0f5a2e 100%);
+    box-shadow: 0 3px 6px rgba(40,180,90,0.4);
+}
+.cell.blue   {
+    background:
+        radial-gradient(circle at 30% 25%, #8cd4ff 0%, #3498db 45%, #0f4570 100%);
+    box-shadow: 0 3px 6px rgba(40,110,200,0.4);
+}
+
+/* 攻击抖动 */
+.q-hero.hit { animation: hitShake 0.4s; }
+@keyframes hitShake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-4px) rotate(-2deg); }
+    75% { transform: translateX(4px) rotate(2deg); }
+}
