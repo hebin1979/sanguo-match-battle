@@ -1,13 +1,13 @@
-/* 涓夊浗娑堥櫎鎴樿 v2.1 - 閰嶇疆 */
+﻿/* 三国消除战记 v2.1 - 配置 */
 window.Game = window.Game || {};
 
 Game.config = {
-    /* 缃戞牸閰嶇疆 */
+    /* 网格配置 */
     GRID_ROWS: 12,
     GRID_COLS: 9,
     TOTAL_CELLS: 108,
 
-    /* 棰滆壊锛堢储寮?0-3锛?/
+    /* 颜色（索引 0-3）*/
     COLORS: ["red", "yellow", "green", "blue"],
     COLOR_COUNT: 4,
     COLOR_RED: 0,
@@ -15,40 +15,45 @@ Game.config = {
     COLOR_GREEN: 2,
     COLOR_BLUE: 3,
 
-    /* 鐜╂硶鍙傛暟 */
-    GREEN_SKILL_THRESHOLD: 5,        // 绱 5 涓豢鑹?鈫?瑙﹀彂涓夋灏嗚繛鍙?    LIUBEI_GREEN_SPAWN: 10,          // 鍒樺浠佸痉澶╀笅锛氬彉 10 涓豢鑹叉柟鍧?    ZHAOYUN_RANDOM_REMOVE: 7,        // 璧典簯涓冭繘涓冨嚭锛氶殢鏈烘秷闄?7 涓潪缁胯壊鏂瑰潡
-    ZHUGELIANG_AREA_SIZE: 3,        // 璇歌憶浜崸榫欏嚭灞憋細3x3 鍖哄煙
+    /* 玩法参数 */
+    GREEN_SKILL_THRESHOLD: 5,        // 累计 5 个绿色 → 触发三武将连发
+    LIUBEI_GREEN_SPAWN: 10,          // 刘备仁德天下：变 10 个绿色方块
+    ZHAOYUN_RANDOM_REMOVE: 7,        // 赵云七进七出：随机消除 7 个非绿色方块
+    ZHUGELIANG_AREA_SIZE: 3,        // 诸葛亮卧龙出山：3x3 区域
     PLAYER_MAX_HP: 100,
     ENEMY_BASE_HP: 100,
-    ENEMY_HP_GROWTH: 50,           // 姣忓叧鏁屼汉鏈€澶ц閲忓闀?    ENEMY_BASE_ATTACK: 5,
-    ENEMY_ATTACK_GROWTH: 3,        // 姣忓叧鏁屼汉鏀诲嚮鍔涘闀?
-    /* 鍔ㄧ敾鏃堕棿锛坢s锛?/
+    ENEMY_HP_GROWTH: 50,           // 每关敌人最大血量增长
+    ENEMY_BASE_ATTACK: 5,
+    ENEMY_ATTACK_GROWTH: 3,        // 每关敌人攻击力增长
+
+    /* 动画时间（ms）*/
     ANIM: {
         SWAP: 250,
         REMOVE: 350,
         FALL: 280,
-        SKILL_CAST: 1500,           // 鍗曚釜姝﹀皢鎶€鑳介噴鏀炬椂闀?        LOG: 1400,
+        SKILL_CAST: 1500,           // 单个武将技能释放时长
+        LOG: 1400,
         DAMAGE_TEXT: 1200
     }
 };
 
-/* 10鍏虫晫浜洪厤缃紙10浣嶅コ鎬т笁鍥戒汉鐗╋級 */
+/* 10关敌人配置（10位女性三国人物） */
 Game.ENEMIES = [
-    { name: "榛勬湀鑻? },
-    { name: "寮犳槦褰? },
-    { name: "鍏抽摱灞? },
-    { name: "鐢勫К" },
-    { name: "寮犳槬鍗? },
-    { name: "灏忎箶" },
-    { name: "澶т箶" },
-    { name: "瀛欏皻棣? },
-    { name: "绁濊瀺澶汉" },
-    { name: "璨傝潐" }
+    { name: "黄月英" },
+    { name: "张星彩" },
+    { name: "关银屏" },
+    { name: "甄姬" },
+    { name: "张春华" },
+    { name: "小乔" },
+    { name: "大乔" },
+    { name: "孙尚香" },
+    { name: "祝融夫人" },
+    { name: "貂蝉" }
 ];
 
-/* 涓夋灏嗛厤缃?*/
+/* 三武将配置 */
 Game.HEROES = {
-    LIUBEI:   { name: "鍒樺",   skill: "浠佸痉澶╀笅", desc: "闅忔満灏?10 涓柟鍧楀彉涓虹豢鑹? },
-    ZHAOYUN:  { name: "璧典簯",   skill: "涓冭繘涓冨嚭", desc: "闅忔満娑堥櫎 7 涓潪缁胯壊鏂瑰潡" },
-    ZHUGELIANG: { name: "璇歌憶浜?, skill: "鍗ч緳鍑哄北", desc: "闅忔満娑堥櫎 3脳3 鍖哄煙" }
+    LIUBEI:   { name: "刘备",   skill: "仁德天下", desc: "随机将 10 个方块变为绿色" },
+    ZHAOYUN:  { name: "赵云",   skill: "七进七出", desc: "随机消除 7 个非绿色方块" },
+    ZHUGELIANG: { name: "诸葛亮", skill: "卧龙出山", desc: "随机消除 3×3 区域" }
 };

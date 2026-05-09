@@ -1,18 +1,19 @@
-/* 涓夊浗娑堥櫎鎴樿 v2.0 - 鎴樻枟绯荤粺
- * 鏍稿績娴佺▼锛? *   resolveTurn锛堝洖鍚堢粨绠楋級鈫?鏀诲嚮鏁屼汉 鈫?鏁屼汉鍙嶅嚮 鈫?涓嬩竴鍏虫垨缁х画
- *   triggerSkillSequence锛氬垬澶?鈫?璧典簯 鈫?璇歌憶浜?涓変汉杩炲彂
- * 鎵€鏈夊紓姝ュ姩浣滅敤 async/await 涓茶仈
+﻿/* 三国消除战记 v2.0 - 战斗系统
+ * 核心流程：
+ *   resolveTurn（回合结算）→ 攻击敌人 → 敌人反击 → 下一关或继续
+ *   triggerSkillSequence：刘备 → 赵云 → 诸葛亮 三人连发
+ * 所有异步动作用 async/await 串联
  */
 window.Game = window.Game || {};
 Game.battle = {};
 
-/* ========== 鍥炲悎缁撶畻 ========== */
+/* ========== 回合结算 ========== */
 Game.battle.resolveTurn = async function() {
     Game.state.phase = Game.PHASE.BATTLE;
 
-    // 璁＄畻鎬讳激瀹筹細姣忚疆鍖归厤鐨勭豢鑹插疂鐭虫暟 脳 璇ヨ疆 combo 鍊嶇巼
-    // perMatchGreens[0] 鏄1杞尮閰?鈫?鍊嶇巼 1x
-    // perMatchGreens[1] 鏄2杞尮閰?鈫?鍊嶇巼 2x
+    // 计算总伤害：每轮匹配的绿色宝石数 × 该轮 combo 倍率
+    // perMatchGreens[0] 是第1轮匹配 → 倍率 1x
+    // perMatchGreens[1] 是第2轮匹配 → 倍率 2x
     let totalDamage = 0;
     Game.state.perMatchGreens.forEach((greens, i) => {
         totalDamage += greens * (i + 1);
@@ -21,59 +22,61 @@ Game.battle.resolveTurn = async function() {
     if (totalDamage > 0) {
         await Game.battle.attackEnemy(totalDamage);
     } else {
-        Game.ui.showBattleLog('鏈舰鎴愭敾鍑?..');
+        Game.ui.showBattleLog('未形成攻击...');
         await Game.match.sleep(900);
     }
 
-    // 鏁屼汉鑻ュ凡姝伙紝杩涘叆涓嬩竴鍏?    if (Game.state.enemyHp <= 0) {
+    // 敌人若已死，进入下一关
+    if (Game.state.enemyHp <= 0) {
         await Game.battle.nextLevel();
         return;
     }
 
-    // 鏁屼汉鍙嶅嚮
+    // 敌人反击
     await Game.battle.enemyAttack();
 
-    // 鐜╁鑻ュ凡姝伙紝娓告垙缁撴潫
+    // 玩家若已死，游戏结束
     if (Game.state.playerHp <= 0) {
         await Game.battle.gameOver();
         return;
     }
 
-    // 閲嶇疆鍥炲悎鏁版嵁锛屽洖鍒扮瓑寰呰緭鍏?    Game.resetTurn();
+    // 重置回合数据，回到等待输入
+    Game.resetTurn();
     Game.ui.updateUI();
     Game.state.phase = Game.PHASE.IDLE;
 };
 
-/* ========== 鏀诲嚮鏁屼汉 ========== */
+/* ========== 攻击敌人 ========== */
 Game.battle.attackEnemy = async function(damage) {
     Game.state.enemyHp = Math.max(0, Game.state.enemyHp - damage);
     Game.ui.showDamage(document.getElementById('enemies'), damage);
-    Game.ui.showBattleLog('閫犳垚 ' + damage + ' 鐐逛激瀹筹紒');
+    Game.ui.showBattleLog('造成 ' + damage + ' 点伤害！');
     Game.ui.updateUI();
     await Game.match.sleep(900);
 
     if (Game.state.enemyHp <= 0) {
-        Game.ui.showBattleLog(Game.state.enemyName + ' 琚嚮璐ワ紒');
+        Game.ui.showBattleLog(Game.state.enemyName + ' 被击败！');
         await Game.match.sleep(1200);
     }
 };
 
-/* ========== 鏁屼汉鏀诲嚮 ========== */
+/* ========== 敌人攻击 ========== */
 Game.battle.enemyAttack = async function() {
     const dmg = Game.state.enemyAttack;
     Game.state.playerHp = Math.max(0, Game.state.playerHp - dmg);
     Game.ui.showDamage(document.querySelector('.side-ally'), dmg);
-    Game.ui.showBattleLog('鏁屾柟鏀诲嚮 -' + dmg);
+    Game.ui.showBattleLog('敌方攻击 -' + dmg);
     Game.ui.updateUI();
     await Game.match.sleep(1200);
 };
 
-/* ========== 杩涘叆涓嬩竴鍏?========== */
+/* ========== 进入下一关 ========== */
 Game.battle.nextLevel = async function() {
     if (Game.state.level >= 10) {
-        Game.ui.showBattleLog('馃帀 鎭枩閫氬叧锛?);
+        Game.ui.showBattleLog('🎉 恭喜通关！');
         await Game.match.sleep(1500);
-        alert('鎭枩閫氬叧鍏ㄩ儴10鍏筹紒');
+        alert('恭喜通关全部10关！');
         location.reload();
         return;
     }
@@ -86,44 +89,47 @@ Game.battle.nextLevel = async function() {
 
     Game.resetTurn();
     Game.ui.updateUI();
-    Game.ui.showBattleLog('绗?' + Game.state.level + ' 鍏?- ' + Game.state.enemyName);
+    Game.ui.showBattleLog('第 ' + Game.state.level + ' 关 - ' + Game.state.enemyName);
     await Game.match.sleep(1200);
     Game.state.phase = Game.PHASE.IDLE;
 };
 
-/* ========== 娓告垙缁撴潫 ========== */
+/* ========== 游戏结束 ========== */
 Game.battle.gameOver = async function() {
     Game.state.phase = Game.PHASE.OVER;
-    Game.ui.showBattleLog('馃拃 娓告垙缁撴潫锛?);
+    Game.ui.showBattleLog('💀 游戏结束！');
     await Game.match.sleep(1500);
-    alert('娓告垙缁撴潫锛乗n浣犲湪绗?' + Game.state.level + ' 鍏宠 ' + Game.state.enemyName + ' 鍑昏触銆?);
+    alert('游戏结束！\n你在第 ' + Game.state.level + ' 关被 ' + Game.state.enemyName + ' 击败。');
     location.reload();
 };
 
-/* ========== 涓夋灏嗘妧鑳借繛鍙?========== */
+/* ========== 三武将技能连发 ========== */
 Game.battle.triggerSkillSequence = async function() {
     Game.state.phase = Game.PHASE.SKILL;
 
-    // 鈥斺€斺€斺€?鍒樺锛氫粊寰峰ぉ涓?鈥斺€斺€斺€?    await Game.battle.skillLiuBei();
+    // ———— 刘备：仁德天下 ————
+    await Game.battle.skillLiuBei();
     await Game.match.sleep(400);
 
-    // 鈥斺€斺€斺€?璧典簯锛氫竷杩涗竷鍑?鈥斺€斺€斺€?    await Game.battle.skillZhaoYun();
+    // ———— 赵云：七进七出 ————
+    await Game.battle.skillZhaoYun();
     await Game.match.sleep(400);
 
-    // 鈥斺€斺€斺€?璇歌憶浜細鍗ч緳鍑哄北 鈥斺€斺€斺€?    await Game.battle.skillZhugeLiang();
+    // ———— 诸葛亮：卧龙出山 ————
+    await Game.battle.skillZhugeLiang();
     await Game.match.sleep(400);
 
-    // 鎶€鑳界粨鏉熷悗鍥炲埌 RESOLVING锛岃 resolveCascade 缁х画澶勭悊鍙兘浜х敓鐨勬柊鍖归厤
+    // 技能结束后回到 RESOLVING，让 resolveCascade 继续处理可能产生的新匹配
     Game.state.phase = Game.PHASE.RESOLVING;
 };
 
-/* ========== 鍒樺锛氫粊寰峰ぉ涓?- 闅忔満 10 涓柟鍧楀彉缁?========== */
+/* ========== 刘备：仁德天下 - 随机 10 个方块变绿 ========== */
 Game.battle.skillLiuBei = async function() {
-    const layer = Game.ui.showSkillOverlay('鈽?, '鍒樺', '浠佸痉澶╀笅');
-    Game.ui.showBattleLog('鍒樺 路 浠佸痉澶╀笅锛?);
+    const layer = Game.ui.showSkillOverlay('☯', '刘备', '仁德天下');
+    Game.ui.showBattleLog('刘备 · 仁德天下！');
     const cells = document.querySelectorAll('.cell');
 
-    // 鍊欓€夌储寮曪細闈炵豢鑹蹭笖闈炵┖
+    // 候选索引：非绿色且非空
     const candidates = [];
     for (let i = 0; i < Game.config.TOTAL_CELLS; i++) {
         if (Game.state.grid[i] !== Game.config.COLOR_GREEN && Game.state.grid[i] >= 0) {
@@ -131,7 +137,8 @@ Game.battle.skillLiuBei = async function() {
         }
     }
 
-    // 鎵撲贡鍚庡彇鍓?10 涓?    for (let i = candidates.length - 1; i > 0; i--) {
+    // 打乱后取前 10 个
+    for (let i = candidates.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
     }
@@ -147,16 +154,17 @@ Game.battle.skillLiuBei = async function() {
     picks.forEach(i => cells[i].classList.remove('falling'));
     Game.ui.hideSkillOverlay(layer);
 
-    // 鍒樺鎶€鑳戒骇鐢熺殑鍖归厤鍏堟秷鎺?    await Game.match.finishRemainingCascade();
+    // 刘备技能产生的匹配先消掉
+    await Game.match.finishRemainingCascade();
 };
 
-/* ========== 璧典簯锛氫竷杩涗竷鍑?- 闅忔満娑堥櫎 7 涓潪缁胯壊鏂瑰潡 ========== */
+/* ========== 赵云：七进七出 - 随机消除 7 个非绿色方块 ========== */
 Game.battle.skillZhaoYun = async function() {
-    const layer = Game.ui.showSkillOverlay('馃悗', '璧典簯', '涓冭繘涓冨嚭');
-    Game.ui.showBattleLog('璧典簯 路 涓冭繘涓冨嚭锛?);
+    const layer = Game.ui.showSkillOverlay('🐎', '赵云', '七进七出');
+    Game.ui.showBattleLog('赵云 · 七进七出！');
     const cells = document.querySelectorAll('.cell');
 
-    // 鍊欓€夌储寮曪細闈炵豢鑹蹭笖闈炵┖
+    // 候选索引：非绿色且非空
     const candidates = [];
     for (let i = 0; i < Game.config.TOTAL_CELLS; i++) {
         if (Game.state.grid[i] !== Game.config.COLOR_GREEN && Game.state.grid[i] >= 0) {
@@ -164,7 +172,8 @@ Game.battle.skillZhaoYun = async function() {
         }
     }
 
-    // 鎵撲贡鍚庡彇鍓?7 涓?    for (let i = candidates.length - 1; i > 0; i--) {
+    // 打乱后取前 7 个
+    for (let i = candidates.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
     }
@@ -179,7 +188,7 @@ Game.battle.skillZhaoYun = async function() {
         cells[i].classList.add('removing');
     });
 
-    // 娑堥櫎锛氳涓轰竴杞尮閰嶏紝combo+1
+    // 消除：计为一轮匹配，combo+1
     Game.state.combo++;
     Game.state.perMatchGreens.push(greenCount);
     Game.state.perMatchReds.push(redCount);
@@ -199,16 +208,16 @@ Game.battle.skillZhaoYun = async function() {
     await Game.match.finishRemainingCascade();
 };
 
-/* ========== 璇歌憶浜細鍗ч緳鍑哄北 - 闅忔満娑堥櫎 3脳3 鍖哄煙 ========== */
+/* ========== 诸葛亮：卧龙出山 - 随机消除 3×3 区域 ========== */
 Game.battle.skillZhugeLiang = async function() {
-    const layer = Game.ui.showSkillOverlay('馃悏', '璇歌憶浜?, '鍗ч緳鍑哄北');
-    Game.ui.showBattleLog('璇歌憶浜?路 鍗ч緳鍑哄北锛?);
+    const layer = Game.ui.showSkillOverlay('🐉', '诸葛亮', '卧龙出山');
+    Game.ui.showBattleLog('诸葛亮 · 卧龙出山！');
     const cells = document.querySelectorAll('.cell');
 
     const CS = Game.config.GRID_COLS;
     const RS = Game.config.GRID_ROWS;
 
-    // 闅忔満璧风偣锛堢‘淇?3脳3 涓嶈秴鍑鸿竟鐣岋級
+    // 随机起点（确保 3×3 不超出边界）
     const startRow = Math.floor(Math.random() * (RS - 2));
     const startCol = Math.floor(Math.random() * (CS - 2));
 
@@ -227,7 +236,7 @@ Game.battle.skillZhugeLiang = async function() {
         }
     }
 
-    // 娑堥櫎锛氳涓轰竴杞尮閰嶏紝combo+1
+    // 消除：计为一轮匹配，combo+1
     Game.state.combo++;
     Game.state.perMatchGreens.push(greenCount);
     Game.state.perMatchReds.push(redCount);
