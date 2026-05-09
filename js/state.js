@@ -1,40 +1,36 @@
-/* 三国消除战记 v2.0 - 状态管理 */
+/* 涓夊浗娑堥櫎鎴樿 v2.0 - 鐘舵€佺鐞?*/
 window.Game = window.Game || {};
 
-/* 游戏阶段枚举 */
+/* 娓告垙闃舵鏋氫妇 */
 Game.PHASE = {
-    IDLE: 'IDLE',             // 等待玩家输入
-    RESOLVING: 'RESOLVING',   // 消除 / 下落 / 连锁进行中
-    SKILL: 'SKILL',           // 三武将技能连发中
-    BATTLE: 'BATTLE',         // 战斗结算中（攻击 / 敌人反击）
-    OVER: 'OVER'              // 游戏结束
+    IDLE: 'IDLE',             // 绛夊緟鐜╁杈撳叆
+    RESOLVING: 'RESOLVING',   // 娑堥櫎 / 涓嬭惤 / 杩為攣杩涜涓?    SKILL: 'SKILL',           // 涓夋灏嗘妧鑳借繛鍙戜腑
+    BATTLE: 'BATTLE',         // 鎴樻枟缁撶畻涓紙鏀诲嚮 / 鏁屼汉鍙嶅嚮锛?    OVER: 'OVER'              // 娓告垙缁撴潫
 };
 
 Game.state = {
-    /* 战斗 */
+    /* 鎴樻枟 */
     level: 1,
     playerHp: 100,
     maxPlayerHp: 100,
     enemyHp: 100,
     maxEnemyHp: 100,
     enemyAttack: 5,
-    enemyName: '黄巾杂兵',
+    enemyName: '榛勫肪鏉傚叺',
 
-    /* 网格 */
-    grid: [],                 // 长度 96，每格存颜色索引（-1 表示空）
+    /* 缃戞牸 */
+    grid: [],                 // 闀垮害 96锛屾瘡鏍煎瓨棰滆壊绱㈠紩锛?1 琛ㄧず绌猴級
     selectedCell: null,
 
-    /* 回合数据 */
+    /* 鍥炲悎鏁版嵁 */
     phase: 'IDLE',
-    combo: 0,                 // 连锁次数（第1次=1，第2次=2...）
-    perMatchGreens: [],       // 每轮匹配的绿色宝石数
-    perMatchReds: [],         // 每轮匹配的红色宝石数
-    totalGreenThisTurn: 0,    // 本回合累计绿色数（用于触发技能）
-    totalRedThisTurn: 0,      // 本回合累计红色数（用于显示治疗）
-    skillTriggered: false     // 本回合是否已触发过技能
-};
+    combo: 0,                 // 杩為攣娆℃暟锛堢1娆?1锛岀2娆?2...锛?    perMatchGreens: [],       // 姣忚疆鍖归厤鐨勭豢鑹插疂鐭虫暟
+    perMatchReds: [],         // 姣忚疆鍖归厤鐨勭孩鑹插疂鐭虫暟
+    totalGreenThisTurn: 0,    // 鏈洖鍚堢疮璁＄豢鑹叉暟锛堢敤浜庤Е鍙戞妧鑳斤級
+    totalRedThisTurn: 0,      // 鏈洖鍚堢疮璁＄孩鑹叉暟锛堢敤浜庢樉绀烘不鐤楋級
+    skillTriggered: false     // 鏈洖鍚堟槸鍚﹀凡瑙﹀彂杩囨妧鑳?};
 
-/* 重置回合数据（敌人反击后调用） */
+/* 閲嶇疆鍥炲悎鏁版嵁锛堟晫浜哄弽鍑诲悗璋冪敤锛?*/
 Game.resetTurn = function() {
     Game.state.combo = 0;
     Game.state.perMatchGreens = [];
