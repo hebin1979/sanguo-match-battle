@@ -1,4 +1,4 @@
-/* 三国消除战记 v2.1 - 样式（立体消除区 + Q版武将 + 顶部双血条） */
+/* 涓夊浗娑堥櫎鎴樿 v2.1 - 鏍峰紡锛堢珛浣撴秷闄ゅ尯 + Q鐗堟灏?+ 椤堕儴鍙岃鏉★級 */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
     background:
@@ -13,7 +13,7 @@ body {
 }
 .game-container { width: 440px; max-width: 100vw; }
 
-/* ===== 顶部双血条面板 ===== */
+/* ===== 椤堕儴鍙岃鏉￠潰鏉?===== */
 .hp-panel {
     display: flex; align-items: center; gap: 8px;
     margin-bottom: 10px;
@@ -47,15 +47,24 @@ body {
 .enemy-hp-fill  { background: linear-gradient(90deg, #ff7070 0%, #c8192a 100%); }
 
 .hp-portrait {
-    width: 40px; height: 40px; border-radius: 50%;
+    width: 36px; height: 48px;
     display: flex; align-items: center; justify-content: center;
     font-size: 18px; font-weight: 900;
     border: 2px solid;
     box-shadow: 0 3px 8px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.3);
     flex-shrink: 0;
+    border-radius: 6px;
 }
-.hp-portrait-ally  { background: radial-gradient(circle at 30% 25%, #ffd56b, #d48a1b); border-color:#ffeaa3; color:#5a2b00; }
-.hp-portrait-enemy { background: radial-gradient(circle at 30% 25%, #b46bff, #4c0d7a); border-color:#e3b8ff; color:#fff; }
+.hp-portrait-ally  { background-color: transparent; border-color:#ffeaa3; color:#5a2b00; }
+.hp-portrait-enemy { background-color: transparent; border-color:#e3b8ff; color:#fff; }
+
+/* 澶村儚鍙栧浘鍍忎笂闈竴鍗?*/
+.hp-portrait-ally {
+    background: url('../role/鍒樺.png') center top/100% 200% no-repeat;
+}
+.hp-portrait-enemy {
+    background: url('../role/榛勬湀鑻?png') center top/100% 200% no-repeat;
+}
 
 .hp-center {
     font-family: 'Impact', 'Arial Black', sans-serif;
@@ -65,7 +74,7 @@ body {
     padding: 0 2px;
 }
 
-/* ===== 关卡条 ===== */
+/* ===== 鍏冲崱鏉?===== */
 .battle-info { text-align: center; margin-bottom: 8px; }
 .level-badge {
     display: inline-block;
@@ -79,7 +88,7 @@ body {
     letter-spacing: 1px;
 }
 
-/* ===== 战场舞台 ===== */
+/* ===== 鎴樺満鑸炲彴 ===== */
 .battle-scene {
     position: relative;
     height: 220px;
@@ -95,7 +104,7 @@ body {
         radial-gradient(ellipse at 50% 120%, #6b2f1a 0%, transparent 60%),
         linear-gradient(180deg, #2b1238 0%, #491832 45%, #2d0f22 100%);
 }
-/* 地面 */
+/* 鍦伴潰 */
 .stage-bg::after {
     content: '';
     position: absolute; left: 0; right: 0; bottom: 0;
@@ -115,7 +124,7 @@ body {
 .side-ally  { left: 8px; width: 52%; }
 .side-enemy { right: 8px; width: 42%; justify-content: flex-end; padding-right: 10px; }
 
-/* ===== Q 版武将通用结构 ===== */
+/* ===== Q 鐗堟灏嗛€氱敤缁撴瀯 ===== */
 .q-hero { position: relative; width: 62px; height: 120px; display:flex; flex-direction: column; align-items:center; justify-content:flex-end; }
 .q-hero.q-enemy { width: 78px; height: 140px; }
 .hero-body { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; animation: heroIdle 2.4s ease-in-out infinite; }
@@ -124,7 +133,7 @@ body {
 @keyframes heroIdle { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-3px);} }
 @keyframes enemyIdle { 0%,100%{ transform: translateY(0) scale(1);} 50%{ transform: translateY(-2px) scale(1.02);} }
 
-/* 头盔 */
+/* 澶寸洈 */
 .hero-helmet {
     width: 42px; height: 22px;
     background: linear-gradient(180deg, #e9c875 0%, #8a5e14 100%);
@@ -135,7 +144,7 @@ body {
     margin-bottom: -4px; z-index: 3;
 }
 .hero-helmet::before {
-    /* 盔顶红缨 */
+    /* 鐩旈《绾㈢绩 */
     content:''; position:absolute; left:50%; top:-9px; transform: translateX(-50%);
     width: 6px; height: 12px;
     background: linear-gradient(180deg, #ff3a3a, #8a0909);
@@ -155,7 +164,7 @@ body {
 .horn-l { left: 4px; transform: rotate(-25deg); }
 .horn-r { right: 4px; transform: rotate(25deg); }
 
-/* 脸 */
+/* 鑴?*/
 .hero-face {
     width: 36px; height: 32px;
     background: radial-gradient(circle at 50% 40%, #ffe0c2, #e5b78a);
@@ -191,7 +200,7 @@ body {
 }
 .beard-zhangfei { background: linear-gradient(180deg, #1a1005, #000); width: 22px; height: 16px; }
 
-/* 躯干（铠甲） */
+/* 韬共锛堥摖鐢诧級 */
 .hero-torso {
     width: 46px; height: 48px;
     margin-top: -2px;
@@ -205,7 +214,7 @@ body {
     position: relative; z-index: 1;
 }
 .hero-torso::before {
-    /* 护心镜 */
+    /* 鎶ゅ績闀?*/
     content:''; position:absolute; top:10px; left:50%; transform:translateX(-50%);
     width:14px; height:14px; border-radius:50%;
     background: radial-gradient(circle at 30% 30%, #ffeeaa, #664400);
@@ -226,10 +235,10 @@ body {
 .shoulder-l { left: -6px; }
 .shoulder-r { right: -6px; }
 
-/* 武器 */
+/* 姝﹀櫒 */
 .hero-weapon { position: absolute; }
 .weapon-sword {
-    /* 刘备·双股剑（右手一把） */
+    /* 鍒樺路鍙岃偂鍓戯紙鍙虫墜涓€鎶婏級 */
     right: -10px; top: 28px;
     width: 6px; height: 52px;
     background: linear-gradient(180deg, #ecefff, #7a83a8);
@@ -243,7 +252,7 @@ body {
     background: linear-gradient(180deg,#d4a64a,#6a3f00); border-radius:2px;
 }
 .weapon-glaive {
-    /* 关羽·青龙偃月刀 */
+    /* 鍏崇窘路闈掗緳鍋冩湀鍒€ */
     right: -14px; top: 14px;
     width: 4px; height: 72px;
     background: linear-gradient(180deg, #7a4a1a, #3a2206);
@@ -258,7 +267,7 @@ body {
     box-shadow: 0 0 10px rgba(90,255,130,0.6);
 }
 .weapon-spear {
-    /* 张飞·丈八蛇矛 */
+    /* 寮犻路涓堝叓铔囩煕 */
     right: -12px; top: 8px;
     width: 4px; height: 82px;
     background: linear-gradient(180deg, #5a3010, #20100a);
@@ -273,7 +282,7 @@ body {
     filter: drop-shadow(0 0 6px rgba(220,230,255,0.8));
 }
 .weapon-axe {
-    /* 敌方·大斧 */
+    /* 鏁屾柟路澶ф枾 */
     left: -14px; top: 16px;
     width: 5px; height: 70px;
     background: linear-gradient(180deg, #4a2a10, #1a0a05);
@@ -288,7 +297,7 @@ body {
     filter: drop-shadow(0 0 6px rgba(180,180,200,0.6));
 }
 
-/* 影子 */
+/* 褰卞瓙 */
 .hero-shadow {
     width: 50px; height: 8px;
     background: radial-gradient(ellipse at center, rgba(0,0,0,0.6), transparent 70%);
@@ -297,7 +306,7 @@ body {
 }
 .q-enemy .hero-shadow { width: 62px; height: 10px; }
 
-/* 名字 */
+/* 鍚嶅瓧 */
 .hero-name {
     font-size: 11px;
     color: #ffde5a;
@@ -308,12 +317,12 @@ body {
 }
 .q-enemy .hero-name { color: #ff9a9a; }
 
-/* 敌方水平翻转朝左 */
+/* 鏁屾柟姘村钩缈昏浆鏈濆乏 */
 .side-enemy .q-hero .hero-body { transform: scaleX(-1); }
 .side-enemy .q-hero .hero-body { animation-name: enemyIdle; }
 .side-enemy .hero-name { transform: none; }
 
-/* ===== 战斗日志 ===== */
+/* ===== 鎴樻枟鏃ュ織 ===== */
 .battle-log {
     position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
     font-size: 14px; color: #f1c40f; font-weight: 700;
@@ -325,7 +334,7 @@ body {
 }
 .battle-log.show { opacity: 1; }
 
-/* ===== 飘字 ===== */
+/* ===== 椋樺瓧 ===== */
 .damage-text, .heal-text, .combo-text {
     position: absolute; font-size: 22px; font-weight: 900;
     pointer-events: none; z-index: 20;
@@ -341,7 +350,7 @@ body {
     100% { opacity:0; transform: translate(-50%, -70px) scale(1); }
 }
 
-/* ===== 技能特效 ===== */
+/* ===== 鎶€鑳界壒鏁?===== */
 .skill-overlay {
     position: absolute; inset: 0;
     background: radial-gradient(circle at 50% 50%, rgba(40,0,40,0.55), rgba(0,0,0,0.85));
@@ -355,7 +364,7 @@ body {
 .skill-text { font-size: 22px; color: #ffde5a; font-weight: 900; text-shadow: 0 0 10px #ff9a1a; letter-spacing: 2px; }
 .skill-subtext { font-size: 13px; color: #eee; margin-top: 4px; }
 
-/* ===== 消除区域信息条 ===== */
+/* ===== 娑堥櫎鍖哄煙淇℃伅鏉?===== */
 .match-info { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
 .info-item {
     padding: 5px 14px; border-radius: 18px;
@@ -369,7 +378,7 @@ body {
 .info-combo   { color: #c58eff; border-color: rgba(155,89,182,0.5); }
 .info-attack  { color: #ffce5a; border-color: rgba(243,156,18,0.55); }
 
-/* ===== 立体消除网格 ===== */
+/* ===== 绔嬩綋娑堥櫎缃戞牸 ===== */
 .grid-container {
     padding: 10px;
     border-radius: 18px;
@@ -394,11 +403,11 @@ body {
 }
 .grid {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(9, 1fr);
     gap: 4px;
 }
 
-/* ===== 格子（3D宝石） ===== */
+/* ===== 鏍煎瓙锛?D瀹濈煶锛?===== */
 .cell {
     position: relative;
     aspect-ratio: 1;
@@ -410,7 +419,7 @@ body {
     border: 1px solid rgba(0,0,0,0.35);
 }
 
-/* 高光层 */
+/* 楂樺厜灞?*/
 .cell::before {
     content: '';
     position: absolute;
@@ -420,7 +429,7 @@ body {
     pointer-events: none;
     filter: blur(0.3px);
 }
-/* 内阴影 / 底缘 */
+/* 鍐呴槾褰?/ 搴曠紭 */
 .cell::after {
     content: '';
     position: absolute; inset: 0;
@@ -451,7 +460,7 @@ body {
     100% { transform: translateY(0) scale(1); opacity:1; }
 }
 
-/* 颜色：用径向渐变打造宝石质感 */
+/* 棰滆壊锛氱敤寰勫悜娓愬彉鎵撻€犲疂鐭宠川鎰?*/
 .cell.red    {
     background:
         radial-gradient(circle at 30% 25%, #ff8a7a 0%, #e74c3c 45%, #8e1811 100%);
@@ -473,10 +482,72 @@ body {
     box-shadow: 0 3px 6px rgba(40,110,200,0.4);
 }
 
-/* 攻击抖动 */
+/* 鏀诲嚮鎶栧姩 */
 .q-hero.hit { animation: hitShake 0.4s; }
 @keyframes hitShake {
     0%,100% { transform: translateX(0); }
     25% { transform: translateX(-4px) rotate(-2deg); }
     75% { transform: translateX(4px) rotate(2deg); }
+}
+
+/* ===== PNG 鍥剧墖瑙掕壊鏍峰紡 ===== */
+.q-hero {
+    position: relative;
+    width: 70px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    animation: heroIdle 2.4s ease-in-out infinite;
+}
+
+.hero-img {
+    position: absolute;
+    bottom: 18px;
+    width: 60px;
+    height: 95px;
+    object-fit: contain;
+    image-rendering: -webkit-optimize-contrast;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+}
+
+.hero-name {
+    font-size: 11px;
+    color: #ffde5a;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.9), 0 0 3px rgba(0,0,0,0.8);
+    font-weight: 700;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+    z-index: 2;
+}
+
+/* 鏁屾柟 */
+.q-hero.q-enemy {
+    width: 85px;
+    height: 145px;
+}
+.q-hero.q-enemy .hero-img {
+    width: 75px;
+    height: 110px;
+    bottom: 20px;
+}
+.q-hero.q-enemy .hero-name {
+    color: #ff9a9a;
+}
+.q-hero.q-enemy {
+    animation: enemyIdle 2.8s ease-in-out infinite;
+}
+
+/* 鏁屾柟姘村钩缈昏浆鏈濆乏锛堥潰瀵规垜鏂癸級 */
+.side-enemy .hero-img {
+    transform: scaleX(-1);
+}
+
+/* 澶村儚缂╃暐鍥撅紙椤堕儴琛€鏉＄敤锛屽彧鍙栧浘鐗囦笂1/2鍖哄煙锛?*/
+.hp-portrait-ally {
+    background: url('../role/鍒樺.png') center top/200% no-repeat;
+}
+.hp-portrait-enemy {
+    background: url('../role/榛勬湀鑻?png') center top/200% no-repeat;
 }
