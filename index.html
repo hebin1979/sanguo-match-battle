@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>三国消除战记</title>
+    <title>涓夊浗娑堥櫎鎴樿</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="game-container">
-        <!-- 战斗区域 -->
+        <!-- 鎴樻枟鍖哄煙 -->
         <div class="battle-area">
-            <!-- 顶部双血条 -->
+            <!-- 椤堕儴鍙岃鏉?-->
             <div class="hp-panel">
                 <div class="hp-side hp-left">
-                    <div class="hp-portrait hp-portrait-ally">刘</div>
+                    <div class="hp-portrait hp-portrait-ally" id="allyPortrait"></div>
                     <div class="hp-main">
                         <div class="hp-row">
-                            <span class="hp-name">我方·刘关张</span>
+                            <span class="hp-name">鐜╁</span>
                             <span class="hp-text" id="playerHpText">100/100</span>
                         </div>
                         <div class="hp-bar-track">
@@ -29,115 +29,60 @@
                     <div class="hp-main">
                         <div class="hp-row hp-row-right">
                             <span class="hp-text" id="enemyHpText">100/100</span>
-                            <span class="hp-name" id="enemyNameTop">敌·黄巾杂兵</span>
+                            <span class="hp-name" id="enemyNameTop">鏁屾柟</span>
                         </div>
                         <div class="hp-bar-track">
                             <div class="hp-bar-fill enemy-hp-fill" id="enemyHpBar" style="width:100%"></div>
                         </div>
                     </div>
-                    <div class="hp-portrait hp-portrait-enemy">敌</div>
+                    <div class="hp-portrait hp-portrait-enemy" id="enemyPortrait"></div>
                 </div>
             </div>
 
-            <!-- 关卡信息条 -->
+            <!-- 鍏冲崱淇℃伅鏉?-->
             <div class="battle-info">
-                <span class="level-badge">第 <span id="level">1</span> 关 / 10</span>
+                <span class="level-badge">绗?<span id="level">1</span> 鍏?/ 10</span>
             </div>
 
-            <!-- 战场：左我方 / 右敌方 -->
+            <!-- 鎴樺満锛氬乏鎴戞柟 / 鍙虫晫鏂?-->
             <div class="battle-scene" id="scene">
                 <div class="stage-bg"></div>
 
-                <!-- 我方阵营（左） -->
+                <!-- 鎴戞柟闃佃惀锛堝乏锛?-->
                 <div class="side side-ally">
-                    <div class="q-hero hero-liubei" data-hero="liubei">
-                        <div class="hero-body">
-                            <div class="hero-helmet"></div>
-                            <div class="hero-face">
-                                <div class="eye eye-l"></div>
-                                <div class="eye eye-r"></div>
-                                <div class="mouth"></div>
-                            </div>
-                            <div class="hero-torso hero-torso-liubei">
-                                <div class="shoulder shoulder-l"></div>
-                                <div class="shoulder shoulder-r"></div>
-                            </div>
-                            <div class="hero-weapon weapon-sword"></div>
-                        </div>
-                        <div class="hero-shadow"></div>
-                        <div class="hero-name">刘备</div>
+                    <div class="q-hero hero-liubei">
+                        <img class="hero-img" src="role/鍒樺.png" alt="鍒樺">
+                        <div class="hero-name">鍒樺</div>
                     </div>
-                    <div class="q-hero hero-guanyu" data-hero="guanyu">
-                        <div class="hero-body">
-                            <div class="hero-helmet hero-helmet-green"></div>
-                            <div class="hero-face face-guanyu">
-                                <div class="eye eye-l"></div>
-                                <div class="eye eye-r"></div>
-                                <div class="beard"></div>
-                            </div>
-                            <div class="hero-torso hero-torso-guanyu">
-                                <div class="shoulder shoulder-l"></div>
-                                <div class="shoulder shoulder-r"></div>
-                            </div>
-                            <div class="hero-weapon weapon-glaive"></div>
-                        </div>
-                        <div class="hero-shadow"></div>
-                        <div class="hero-name">关羽</div>
+                    <div class="q-hero hero-zhaoyun">
+                        <img class="hero-img" src="role/璧典簯.png" alt="璧典簯">
+                        <div class="hero-name">璧典簯</div>
                     </div>
-                    <div class="q-hero hero-zhangfei" data-hero="zhangfei">
-                        <div class="hero-body">
-                            <div class="hero-helmet hero-helmet-dark"></div>
-                            <div class="hero-face face-zhangfei">
-                                <div class="eye eye-l eye-angry"></div>
-                                <div class="eye eye-r eye-angry"></div>
-                                <div class="beard beard-zhangfei"></div>
-                            </div>
-                            <div class="hero-torso hero-torso-zhangfei">
-                                <div class="shoulder shoulder-l"></div>
-                                <div class="shoulder shoulder-r"></div>
-                            </div>
-                            <div class="hero-weapon weapon-spear"></div>
-                        </div>
-                        <div class="hero-shadow"></div>
-                        <div class="hero-name">张飞</div>
+                    <div class="q-hero hero-zhugeliang">
+                        <img class="hero-img" src="role/璇歌憶浜?png" alt="璇歌憶浜?>
+                        <div class="hero-name">璇歌憶浜?/div>
                     </div>
                 </div>
 
-                <!-- 敌方阵营（右） -->
+                <!-- 鏁屾柟闃佃惀锛堝彸锛?-->
                 <div class="side side-enemy" id="enemies">
                     <div class="q-hero q-enemy">
-                        <div class="hero-body">
-                            <div class="hero-helmet hero-helmet-enemy">
-                                <div class="horn horn-l"></div>
-                                <div class="horn horn-r"></div>
-                            </div>
-                            <div class="hero-face face-enemy">
-                                <div class="eye eye-l eye-red"></div>
-                                <div class="eye eye-r eye-red"></div>
-                                <div class="mouth mouth-evil"></div>
-                            </div>
-                            <div class="hero-torso hero-torso-enemy">
-                                <div class="shoulder shoulder-l"></div>
-                                <div class="shoulder shoulder-r"></div>
-                            </div>
-                            <div class="hero-weapon weapon-axe"></div>
-                        </div>
-                        <div class="hero-shadow"></div>
-                        <div class="hero-name" id="enemyName">黄巾杂兵</div>
+                        <img class="hero-img enemy-img" id="enemyImg" src="role/榛勬湀鑻?png" alt="鏁屾柟">
+                        <div class="hero-name" id="enemyName">榛勬湀鑻?/div>
                     </div>
                 </div>
 
-                <!-- 战斗日志 -->
+                <!-- 鎴樻枟鏃ュ織 -->
                 <div class="battle-log" id="battleLog"></div>
             </div>
         </div>
 
-        <!-- 消除区域 -->
+        <!-- 娑堥櫎鍖哄煙 -->
         <div class="match-area">
             <div class="match-info">
-                <div class="info-item info-heal">❤️ 回血 <span id="healAmount">0</span></div>
-                <div class="info-item info-combo">✨ <span id="combo">0</span>绿</div>
-                <div class="info-item info-attack">⚔️ <span id="attackPower">0</span></div>
+                <div class="info-item info-heal">鉂わ笍 鍥炶 <span id="healAmount">0</span></div>
+                <div class="info-item info-combo">鉁?<span id="combo">0</span>缁?/div>
+                <div class="info-item info-attack">鈿旓笍 <span id="attackPower">0</span></div>
             </div>
             <div class="grid-container">
                 <div class="grid-inner">
@@ -147,7 +92,7 @@
         </div>
     </div>
 
-    <!-- JS文件 -->
+    <!-- JS鏂囦欢 -->
     <script src="js/config.js"></script>
     <script src="js/state.js"></script>
     <script src="js/match.js"></script>
